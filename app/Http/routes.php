@@ -25,6 +25,15 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
+     * Show a Task
+     */
+     Route::get('/task/{id}', function ($id) {
+        $task = Task::findOrFail($id);
+
+        return Response::json($task);
+     });
+
+    /**
      * Add New Task
      */
     Route::post('/task', function (Request $request) {
@@ -34,37 +43,48 @@ Route::group(['middleware' => ['web']], function () {
         ]);
 
         if ($validator->fails()) {
-            return redirect('/')
-                ->withInput()
-                ->withErrors($validator);
+            return Response::json($validator->errors(), 400);
         }
 
         $task = new Task;
         $task->name = $request->name;
         $task->description = $request->description;
+        $task->done = $request->done;
         $task->save();
 
-        return redirect('/');
+        return Response::json($task);
     });
 
     /**
      * Update Task
      */
-     Route::patch('/task/{id}', function ($id) {
-        $task = Task::findOrFail($id);
+     Route::put('/task/{id}', function (Request $request, $id) {
+        $task = Task::find($id);
 
-        $task->done = !$task->done;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:5|max:50',
+            'description' => 'max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
+    
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->done = $request->done;
+
         $task->save();
 
-        return redirect('/');
+        return Response::json($task);
      });
 
     /**
      * Delete Task
      */
     Route::delete('/task/{id}', function ($id) {
-        Task::findOrFail($id)->delete();
-
-        return redirect('/');
+        $task = Task::destroy($id);
+        
+        return Response::json($task);
     });
 });
