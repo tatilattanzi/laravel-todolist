@@ -15,7 +15,6 @@ $(document).ready(function() {
             $('#description').val(data.description);
             $('#done').prop('checked', data.done == 1 ? true : false);
             $('#btn-save').val('update');
-            console.log($('#btn-save').val());;
             $('#modalEdit').modal('show');
         })
     });
@@ -95,7 +94,6 @@ $(document).ready(function() {
                 var errorsHtml = '<div id="errors" class="alert alert-danger"><ul>';
 
                 for (var index in errors) {
-                    console.log(errors[index]);
                     errorsHtml += '<li>' + errors[index] + '</li>';
                 }
 
