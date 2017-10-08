@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 use App\Task;
-use App\Http\Requests;
+use App\Http\Requests\TaskRequest;
 use App\Http\Controllers\Controller;
 
 class TaskController extends Controller
 {
-    
+
+
     /**
      * Display a listing of the resource.
      *
@@ -45,17 +46,8 @@ class TaskController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:5|max:50',
-            'description' => 'max:255'
-          ]);
-  
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
-  
         $task = new Task;
         $task->name = $request->name;
         $task->description = $request->description;
@@ -71,18 +63,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
         $task = Task::find($id);
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:5|max:50',
-            'description' => 'max:255'
-          ]);
-  
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
 
         $task->name = $request->name;
         $task->description = $request->description;

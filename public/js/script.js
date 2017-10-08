@@ -9,7 +9,6 @@ $(document).ready(function() {
 
         $.get(url + '/' + task_id, function(data) {
             //success data
-            console.log(data);
             $('#task_id').val(data.id);
             $('#name').val(data.name);
             $('#description').val(data.description);
@@ -61,7 +60,6 @@ $(document).ready(function() {
             data: formData,
             dataType: 'json',
             success: function(data) {
-                console.log(data);
 
                 var task_name = '<div id="task-name' + data.id + '">' + data.name + '</div>';
                 var task_desc = '<div id="task-desc' + data.id + '">' + data.description + '</div>';
